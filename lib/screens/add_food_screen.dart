@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../database/db_helper.dart';
+import '../models/food_spot.dart';
 
 class AddFoodScreen extends StatefulWidget {
   const AddFoodScreen({super.key});
@@ -10,11 +12,26 @@ class AddFoodScreen extends StatefulWidget {
 class _AddFoodScreenState extends State<AddFoodScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final nameController = TextEditingController();
-  final cuisineController = TextEditingController();
-  final notesController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController cuisineController = TextEditingController();
+  final TextEditingController notesController = TextEditingController();
 
   int rating = 1;
+
+  Future<void> saveFoodSpot() async {
+    if (_formKey.currentState!.validate()) {
+      final newSpot = FoodSpot(
+        name: nameController.text,
+        cuisine: cuisineController.text,
+        rating: rating,
+        notes: notesController.text,
+      );
+
+      await DBHelper.instance.insertFoodSpot(newSpot);
+
+      Navigator.pop(context, true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +60,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
               const SizedBox(height: 10),
               DropdownButtonFormField<int>(
                 value: rating,
+                decoration: const InputDecoration(labelText: 'Rating'),
                 items: [1, 2, 3, 4, 5]
                     .map((e) => DropdownMenuItem(
                           value: e,
@@ -57,12 +75,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // will add DB logic next commit
-                    Navigator.pop(context);
-                  }
-                },
+                onPressed: saveFoodSpot,
                 child: const Text('Save'),
               )
             ],
