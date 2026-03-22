@@ -18,6 +18,7 @@ class _DetailScreenState extends State<DetailScreen> {
   late TextEditingController cuisineController;
   late TextEditingController notesController;
   int rating = 1;
+  bool isFavorite = false;
 
   @override
   void initState() {
@@ -26,6 +27,7 @@ class _DetailScreenState extends State<DetailScreen> {
     cuisineController = TextEditingController(text: widget.spot.cuisine);
     notesController = TextEditingController(text: widget.spot.notes);
     rating = widget.spot.rating;
+    isFavorite = widget.spot.isFavorite;
   }
 
   Future<void> updateSpot() async {
@@ -36,7 +38,7 @@ class _DetailScreenState extends State<DetailScreen> {
         cuisine: cuisineController.text,
         rating: rating,
         notes: notesController.text,
-        isFavorite: widget.spot.isFavorite,
+        isFavorite: isFavorite,
       );
 
       await DBHelper.instance.updateFoodSpot(updatedSpot);
@@ -89,6 +91,24 @@ class _DetailScreenState extends State<DetailScreen> {
                   });
                 },
               ),
+
+              const SizedBox(height: 10),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Favorite'),
+                  Switch(
+                    value: isFavorite,
+                    onChanged: (value) {
+                      setState(() {
+                        isFavorite = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: updateSpot,
