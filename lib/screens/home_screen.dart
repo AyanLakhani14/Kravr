@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../database/db_helper.dart';
 import '../models/food_spot.dart';
+import 'add_food_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
     loadData();
   }
 
-  void loadData() async {
+  Future<void> loadData() async {
     final data = await DBHelper.instance.getAllFoodSpots();
     setState(() {
       spots = data;
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Kravr')),
+
       body: spots.isEmpty
           ? const Center(child: Text('No food spots yet'))
           : ListView.builder(
@@ -41,6 +43,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddFoodScreen(),
+            ),
+          );
+
+          if (result == true) {
+            loadData();
+          }
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
