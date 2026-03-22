@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../database/db_helper.dart';
 import '../models/food_spot.dart';
 import 'add_food_screen.dart';
+import 'detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -40,6 +41,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 return ListTile(
                   title: Text(spot.name),
                   subtitle: Text(spot.cuisine),
+                  onTap: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            DetailScreen(spot: spot),
+                      ),
+                    );
+
+                    if (result == true) {
+                      loadData();
+                    }
+                  },
                 );
               },
             ),
