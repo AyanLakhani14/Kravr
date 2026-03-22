@@ -61,27 +61,47 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       body: spots.isEmpty
-          ? const Center(child: Text('No food spots yet'))
+          ? const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.restaurant, size: 80, color: Colors.grey),
+                  SizedBox(height: 10),
+                  Text(
+                    'No food spots yet',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Text('Tap + to add your first spot'),
+                ],
+              ),
+            )
           : ListView.builder(
               itemCount: spots.length,
               itemBuilder: (context, index) {
                 final spot = spots[index];
-                return ListTile(
-                  title: Text(spot.name),
-                  subtitle: Text(spot.cuisine),
-                  onTap: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            DetailScreen(spot: spot),
-                      ),
-                    );
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 5),
+                  child: ListTile(
+                    title: Text(spot.name),
+                    subtitle: Text(spot.cuisine),
+                    trailing: spot.isFavorite
+                        ? const Icon(Icons.star, color: Colors.orange)
+                        : null,
+                    onTap: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DetailScreen(spot: spot),
+                        ),
+                      );
 
-                    if (result == true) {
-                      loadData();
-                    }
-                  },
+                      if (result == true) {
+                        loadData();
+                      }
+                    },
+                  ),
                 );
               },
             ),
