@@ -7,6 +7,7 @@ import 'login_screen.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
+  // 👤 GET USER INFO
   Future<Map<String, String>> getUser() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -17,12 +18,15 @@ class SettingsScreen extends StatelessWidget {
     };
   }
 
+  // 🚪 FIXED LOGOUT FUNCTION
   Future<void> logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
 
-    Navigator.pushAndRemoveUntil(
-      context,
+    // 🔥 ONLY reset login state (DO NOT clear everything)
+    await prefs.setBool('loggedIn', false);
+
+    // 🚀 CLEAR STACK + GO TO LOGIN
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const LoginScreen()),
       (route) => false,
     );
@@ -66,8 +70,11 @@ class SettingsScreen extends StatelessWidget {
                       const CircleAvatar(
                         radius: 35,
                         backgroundColor: Colors.white,
-                        child: Icon(Icons.person,
-                            size: 40, color: Colors.orange),
+                        child: Icon(
+                          Icons.person,
+                          size: 40,
+                          color: Colors.orange,
+                        ),
                       ),
                       const SizedBox(height: 10),
                       Text(
@@ -96,26 +103,22 @@ class SettingsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black12,
                         blurRadius: 5,
                       ),
                     ],
                   ),
-                  child: Column(
+                  child: Row(
                     children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.email, color: Colors.orange),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              user['email']!,
-                              style: GoogleFonts.poppins(),
-                            ),
-                          ),
-                        ],
+                      const Icon(Icons.email, color: Colors.orange),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          user['email']!,
+                          style: GoogleFonts.poppins(),
+                        ),
                       ),
                     ],
                   ),

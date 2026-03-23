@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'home_screen.dart';
+import 'main_nav_screen.dart'; // ✅ FIXED IMPORT
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,9 +26,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     await prefs.setBool('loggedIn', true);
 
+    // 🔥 FIX: GO TO MAIN NAV, NOT HOME
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
+      MaterialPageRoute(builder: (_) => const MainNavScreen()),
     );
   }
 

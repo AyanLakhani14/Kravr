@@ -16,20 +16,28 @@ class MainNavScreen extends StatefulWidget {
 class _MainNavScreenState extends State<MainNavScreen> {
   int currentIndex = 0;
 
-  final List<Widget> pages = const [
-    HomeScreen(),
-    MapScreen(),
-    FavoritesScreen(),
-    HistoryScreen(),
-    SettingsScreen(),
-  ];
+  // 🔥 KEEP SCREENS PERSISTENT (prevents reload issues)
+  late final List<Widget> pages;
+
+  @override
+  void initState() {
+    super.initState();
+
+    pages = [
+      const HomeScreen(),
+      const MapScreen(),
+      const FavoritesScreen(),
+      const HistoryScreen(),
+      const SettingsScreen(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: pages[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: pages,
       ),
 
       bottomNavigationBar: BottomNavigationBar(
