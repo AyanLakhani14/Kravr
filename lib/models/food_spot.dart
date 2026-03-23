@@ -1,10 +1,12 @@
 class FoodSpot {
-  int? id;
-  String name;
-  String cuisine;
-  int rating;
-  String notes;
-  bool isFavorite;
+  final int? id;
+  final String name;
+  final String cuisine;
+  final int rating;
+  final String notes;
+  final double latitude;
+  final double longitude;
+  final bool isFavorite; // ✅ ADD THIS
 
   FoodSpot({
     this.id,
@@ -12,7 +14,9 @@ class FoodSpot {
     required this.cuisine,
     required this.rating,
     required this.notes,
-    this.isFavorite = false,
+    required this.latitude,
+    required this.longitude,
+    this.isFavorite = false, // ✅ DEFAULT
   });
 
   Map<String, dynamic> toMap() {
@@ -22,7 +26,9 @@ class FoodSpot {
       'cuisine': cuisine,
       'rating': rating,
       'notes': notes,
-      'isFavorite': isFavorite ? 1 : 0,
+      'latitude': latitude,
+      'longitude': longitude,
+      'isFavorite': isFavorite ? 1 : 0, // ✅ STORE AS INT
     };
   }
 
@@ -33,7 +39,9 @@ class FoodSpot {
       cuisine: map['cuisine'],
       rating: map['rating'],
       notes: map['notes'],
-      isFavorite: map['isFavorite'] == 1,
+      latitude: map['latitude'],
+      longitude: map['longitude'],
+      isFavorite: map['isFavorite'] == 1, // ✅ READ INT
     );
   }
 }
